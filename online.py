@@ -8,8 +8,8 @@ from decouple import config
 EMAIL = config("EMAIL")
 PASSWORD = config("PASSWORD")
 
-NEWS_API_KEY = config("NEWS_API_KEY")
-OPENWEATHER_APP_ID = config("OPENWEATHER_APP_ID")
+NEWS_FETCH_API_KEY = config("NEWS_FETCH_API_KEY")
+WEATHER_FORECAST_API_KEY = config("WEATHER_FORECAST_API_KEY")
 
 
 def find_my_ip():
@@ -38,7 +38,10 @@ def send_email(receiver_address, subject, message):
         email['From'] = EMAIL
         email.set_content(message)
         s = smtplib.SMTP("smtp.gmail.com", 587)
+        print(s)
+        s.ehlo()
         s.starttls()
+        s.ehlo()
         s.login(EMAIL, PASSWORD)
         s.send_message(email)
         s.close()
@@ -59,7 +62,7 @@ def get_random_joke():
 def get_latest_news():
     news_headlines = []
     res = requests.get(
-        f"https://newsapi.org/v2/top-headlines?country=in&apiKey={NEWS_API_KEY}&category=general").json()
+        f"https://newsapi.org/v2/top-headlines?country=us&apiKey={NEWS_FETCH_API_KEY}&category=general").json()
     articles = res["articles"]
     for article in articles:
         news_headlines.append(article["title"])
@@ -68,10 +71,10 @@ def get_latest_news():
 
 def get_weather_report(city):
     res = requests.get(
-        f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={OPENWEATHER_APP_ID}&units=metric").json()
+        f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={WEATHER_FORECAST_API_KEY}&units=metric").json()
     weather = res["weather"][0]["main"]
-    temprature = res["main"]["temp"]
+    temperature = res["main"]["temp"]
     feels_like = res["main"]["feels_like"]
-    return weather, f"{temprature}°C", f"{feels_like}°C"
+    return weather, f"{temperature}°C", f"{feels_like}°C"
 
 

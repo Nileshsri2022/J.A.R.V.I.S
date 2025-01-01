@@ -25,6 +25,7 @@ from online import search_on_wikipedia, play_on_youtube, search_on_google, send_
 EMAIL = config('EMAIL')
 
 USER = config('USER')
+APP_ID = config('APP_ID')
 HOSTNAME = config('BOT')
 
 engine = pyttsx3.init('sapi5')
@@ -33,10 +34,8 @@ engine.setProperty('volume', 1.5)
 engine.setProperty('rate', 220)
 
 voices = engine.getProperty('voices')
-engine.setProperty('voice', voices[1].id)
+engine.setProperty('voice', voices[0].id)
 
-
-#
 # window = Tk()
 #
 # window.configure(bg = “”)
@@ -53,6 +52,7 @@ def wish_me():
     """Greets the user according to the time"""
 
     hour = datetime.now().hour
+    print(hour)
     if (hour >= 6) and (hour < 12):
         speak(f"Good Morning {USER}")
     elif (hour >= 12) and (hour <= 16):
@@ -62,7 +62,7 @@ def wish_me():
     speak(f"I am {HOSTNAME}. How may I assist you?{USER}")
 
 
-listening = False
+listening = True
 
 
 def start_listening():
@@ -90,7 +90,7 @@ def take_user_input():
 
     try:
         print('Recognizing....')
-        queri = r.recognize_google(audio, language='en-in')
+        queri = r.recognize_google(audio)
         print(queri)
         if not 'stop' in queri or 'exit' in queri:
             speak(choice(opening_text))
@@ -157,7 +157,7 @@ if __name__ == '__main__':
                     pyautogui.click(x=1750, y=320, clicks=1, interval=0, button='left')
 
                 elif 'calculate' in query:
-                    app_id = "6QA5RJ-LHVGXJXLJ7"
+                    app_id = APP_ID
                     client = wolframalpha.Client(app_id)
                     ind = query.lower().split().index("calculate")
                     text = query.split()[ind + 1:]
@@ -170,7 +170,7 @@ if __name__ == '__main__':
                         speak("I couldn't calculate that. Please try again.")
 
                 elif 'what is' in query or 'who is' in query or 'which is' in query or 'where did ' in query:
-                    app_id = "6QA5RJ-LHVGXJXLJ7"  # Replace with your actual Wolfram Alpha App ID
+                    app_id = APP_ID  # Replace with your actual Wolfram Alpha App ID
                     client = wolframalpha.Client(app_id)
                     try:
 
