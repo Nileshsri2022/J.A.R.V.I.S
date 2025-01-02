@@ -75,7 +75,7 @@ def get_news():
     result = requests.get(
         NEWS_FETCH_API_URL,
         params={
-            "country": "in",
+            "country": "us",
             "category": "general",
             "apiKey": NEWS_FETCH_API_KEY
         },
